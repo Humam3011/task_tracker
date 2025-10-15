@@ -1,0 +1,80 @@
+
+# YTHON / FASTAPI BACKEND
+
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.db
+*.sqlite3
+*.log
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Environment variables
+*.env
+.env.*
+
+# IDE / Editor folders
+.vscode/
+.idea/
+*.swp
+
+# Cache & build
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.cache/
+dist/
+build/
+
+
+# REACT FRONTEND (Vite)
+
+node_modules/
+dist/
+build/
+*.local
+*.lock
+*.log
+
+# Vite cache
+.vite/
+.vite/deps/
+
+# React environment files
+frontend/.env
+frontend/.env.local
+frontend/.env.development
+frontend/.env.production
+
+
+# ATABASE / TEMP FILES
+
+*.sqlite
+*.sql
+*.bak
+*.tmp
+*.log
+*.pid
+
+
+# SYSTEM & OS
+
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+
+# TEST & MISC
+
+coverage/
+htmlcov/
+pytestdebug.log
+test-results/
