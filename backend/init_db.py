@@ -1,5 +1,5 @@
 from database import engine, Base
-from models import Task
+from models import Task, User, TaskLog  # Tambahkan semua model
 
 print("🔄 Dropping and recreating tables...")
 Base.metadata.drop_all(bind=engine)
