@@ -20,8 +20,7 @@ def get_db():
     finally:
         db.close()
 
-# 🔧 Helper untuk serialisasi dict (menghindari error JSON)
-def serialize(obj):
+
     if isinstance(obj, (datetime, date)):
         return obj.isoformat()
     return str(obj)
@@ -58,14 +57,14 @@ def log_task(
     print(f"🔹 new_value     = {new_value}")
 
     try:
-        # 🔧 Serialisasi JSON
+       
         serialized_old = safe_json(old_value) if old_value else None
         serialized_new = safe_json(new_value) if new_value else None
 
         print(f"📦 serialized_old_value = {serialized_old}")
         print(f"📦 serialized_new_value = {serialized_new}")
 
-        # ✅ Buat objek log
+        
         log = TaskLog(
             task_id=task_id,
             action=action,
@@ -92,7 +91,7 @@ def get_orphan_logs(db: Session = Depends(get_db)):
     return db.query(TaskLog).filter(TaskLog.task_id == None).all()
 
 
-# ✅ Create Task
+# Create task
 @router.post("/", response_model=TaskResponse)
 def create_task(task: TaskCreate, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     db_task = Task(**task.dict())
@@ -104,7 +103,7 @@ def create_task(task: TaskCreate, db: Session = Depends(get_db), current_user=De
 
     log_task(
         db,
-        task_id=db_task.id,  # ⬅️ HARUS integer, bukan None
+        task_id=db_task.id,  
         action="create",
         old_value=None,
         new_value=task.dict(),
@@ -114,12 +113,12 @@ def create_task(task: TaskCreate, db: Session = Depends(get_db), current_user=De
 
     return db_task
 
-# ✅ Get Active Tasks (Dashboard)
+# Task yang sedang aktif
 @router.get("/", response_model=List[TaskResponse])
 def get_active_tasks(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     return db.query(Task).filter(Task.status.in_(["Belum Dimulai", "Sedang Dikerjakan", "Selesai"])).all()
 
-# ✅ Get Task by ID
+# Mengambil task dari id
 @router.get("/{task_id}", response_model=TaskResponse)
 def get_task(task_id: int, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     task = db.query(Task).filter(Task.id == task_id).first()
@@ -127,7 +126,7 @@ def get_task(task_id: int, db: Session = Depends(get_db), current_user=Depends(g
         raise HTTPException(status_code=404, detail="Task tidak ditemukan")
     return task
 
-# ✅ Update Task
+# Edit task
 @router.put("/{task_id}", response_model=TaskResponse)
 def update_task(task_id: int, updated_task: TaskUpdate, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     task = db.query(Task).filter(Task.id == task_id).first()
@@ -168,7 +167,7 @@ def update_task(task_id: int, updated_task: TaskUpdate, db: Session = Depends(ge
 
     return task
 
-# ✅ Delete Task
+# Hapus Task
 @router.delete("/{task_id}")
 def delete_task(task_id: int, db: Session = Depends(get_db), current_user: schemas.User = Depends(get_current_user)):
     task = db.query(models.Task).filter(models.Task.id == task_id).first()
@@ -177,11 +176,11 @@ def delete_task(task_id: int, db: Session = Depends(get_db), current_user: schem
 
     old_value = task.__dict__.copy()
 
-    # Simpan log dulu
+
     log_task(db, task_id=task.id, action="delete", performed_by=current_user.username, user_id=current_user.id, old_value=old_value, new_value=None)
 
 
-    # Baru hapus task
+
     db.delete(task)
     db.commit()
 

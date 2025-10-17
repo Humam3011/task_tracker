@@ -3,9 +3,8 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import TaskLog
 from typing import List
-
 from schemas import TaskLogCreate, TaskLogResponse
-from routes.auth import get_current_user  # Untuk autentikasi
+from routes.auth import get_current_user 
 
 router = APIRouter(prefix="/logs", tags=["logs"])
 
@@ -14,7 +13,7 @@ def create_log(log: TaskLogCreate, db: Session = Depends(get_db), current_user: 
     new_log = TaskLog(
         task_id=log.task_id,
         action=log.action,
-        performed_by=current_user,  # Dari autentikasi
+        performed_by=current_user,  
         old_value=log.old_value,
         new_value=log.new_value
     )

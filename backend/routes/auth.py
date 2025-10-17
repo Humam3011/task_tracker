@@ -13,7 +13,7 @@ SECRET_KEY = "your-secret-key"  # Ganti dengan secret yang aman
 security = HTTPBearer()
 
 
-# --- Request Models ---
+# Fungsi Request Model
 class UserCreate(BaseModel):
     username: str
     password: str
@@ -23,7 +23,7 @@ class UserLogin(BaseModel):
     username: str
     password: str
 
-# --- Register ---
+# Register akun
 @router.post("/register")
 def register(user: UserCreate, db: Session = Depends(get_db)):
     if user.role not in ["PM", "Karyawan"]:
@@ -46,7 +46,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return {"message": "Registrasi berhasil"}
 
-# --- Login ---
+# Login akun
 @router.post("/login")
 def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = db.query(models.User).filter(models.User.username == user.username).first()
@@ -56,7 +56,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     token = jwt.encode({"sub": db_user.username}, SECRET_KEY, algorithm="HS256")
     return {"access_token": token, "role": db_user.role}
 
-# --- Get Current User ---
+# Mengambil kredensial akun
 def get_current_user(
     db: Session = Depends(get_db),
     credentials: HTTPAuthorizationCredentials = Depends(security)
@@ -81,7 +81,7 @@ def get_current_user(
         raise HTTPException(status_code=401, detail="Token tidak valid")
 
 
-# --- Role-Based Access ---
+# Role login
 def require_pm(user=Depends(get_current_user)):
     if user.role != "PM":
         raise HTTPException(
@@ -90,7 +90,7 @@ def require_pm(user=Depends(get_current_user)):
         )
     return user
 
-# --- Get User Info ---
+# Mengambil info akun
 @router.get("/me")
 def get_me(user=Depends(get_current_user)):
     return {

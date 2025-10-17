@@ -65,7 +65,7 @@ const Dashboard = () => {
         </h1>
       </div>
 
-      {/* Statistik Ringkas */}
+      {/* Statistik */}
       <div className="row mb-4 text-center">
         <div className="col-md-4 mb-3">
           <div className="card shadow-sm border-0">
@@ -111,7 +111,7 @@ const Dashboard = () => {
 
         {role === "PM" && (
           <Link to="/add-task" className="btn btn-primary">
-            ➕ Tambah Tugas
+            Tambah Tugas
           </Link>
         )}
       </div>
@@ -144,7 +144,7 @@ const Dashboard = () => {
                   <td>{task.end_date ? new Date(task.end_date).toLocaleDateString() : "-"}</td>
                   {role === "PM" && (
                     <td className="text-center">
-                      <Link to={`/edit-task/${task.id}`} className="btn btn-sm btn-warning me-2">
+                      <Link to={`/edit-task/${task.id}`} className="btn btn-sm btn-primary me-2">
                         Edit
                       </Link>
                       <button
