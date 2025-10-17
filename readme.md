@@ -23,7 +23,7 @@ Task Tracker adalah aplikasi manajemen tugas berbasis web yang dirancang untuk m
 
 ## ⚙️ Instalasi & Menjalankan Proyek
 
-### 1. Backend
+### 1. Backend dan Frontend
 
 ```bash
 cd backend
